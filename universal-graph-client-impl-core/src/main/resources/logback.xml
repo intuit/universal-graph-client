@@ -1,0 +1,28 @@
+<graphConfiguration>
+	<property name="LOGDIR" value="/home/universal_graph_client/logs/" />
+
+	<appender name="FILE"
+		class="ch.qos.logback.core.rolling.RollingFileAppender">
+		<file>${LOGDIR}/sangria_ingestion.log</file>
+		<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+			<!-- daily rollover -->
+			<fileNamePattern>${LOGDIR}/universal_graph_client.%d{yyyy-MM-dd}.%i.log
+			</fileNamePattern>
+			<timeBasedFileNamingAndTriggeringPolicy
+				class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
+				<!-- or whenever the file size reaches 100MB -->
+				<maxFileSize>50MB</maxFileSize>
+			</timeBasedFileNamingAndTriggeringPolicy>
+			<!-- keep 30 days' worth of history -->
+			<maxHistory>3</maxHistory>
+		</rollingPolicy>
+		<encoder>
+			<pattern>%d{dd MMM yyyy;HH:mm:ss.SSS} %-5level [%thread][%logger{0}]
+				%m%n</pattern>
+		</encoder>
+	</appender>
+
+	<root level="INFO">
+		<appender-ref ref="FILE" />
+	</root>
+</graphConfiguration>

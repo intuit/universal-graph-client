@@ -1,0 +1,158 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!-- Copyright (c) 2012-2016 YCSB contributors. All rights reserved. Licensed 
+	under the Apache License, Version 2.0 (the "License"); you may not use this 
+	file except in compliance with the License. You may obtain a copy of the 
+	License at http://www.apache.org/licenses/LICENSE-2.0 Unless required by 
+	applicable law or agreed to in writing, software distributed under the License 
+	is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY 
+	KIND, either express or implied. See the License for the specific language 
+	governing permissions and limitations under the License. See accompanying 
+	LICENSE file. -->
+
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+		 xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+	
+	<parent>
+        	<groupId>com.intuit.graph.client</groupId>
+        	<artifactId>graph-client-core</artifactId>
+        	<version>1.0-SNAPSHOT</version>
+    	</parent>
+	
+	<modelVersion>4.0.0</modelVersion>
+	<groupId>com.intuit.graph.client.impl</groupId>
+	<artifactId>universal-graph-client-impl-core</artifactId>
+	<name>universal-graph-client-impl-core</name>
+	<packaging>jar</packaging>
+
+	<properties>
+		<!-- Skip tests by default. will be activated by jdk8 profile -->
+		<skipTests>true</skipTests>
+	</properties>
+
+	<repositories>
+		<repository>
+			<id>central</id>
+			<name>Maven Repository Switchboard</name>
+			<layout>default</layout>
+			<url>http://repo1.maven.org/maven2</url>
+			<snapshots>
+				<enabled>false</enabled>
+			</snapshots>
+		</repository>
+		<repository>
+			<id>intuit-nexus</id>
+			<name>Intuit Nexus Repo</name>
+			<url>http://nexus.intuit.net/nexus/content/groups/public</url>
+		</repository>
+		<repository>
+			<id>idea-nexus-snapshot</id>
+			<name>IDEA Nexus Snapshot Repo</name>
+			<url>http://nexus2-idea.intuit.net/nexus/content/repositories/intuit-idea-analytics-snapshots</url>
+			<snapshots>
+				<updatePolicy>always</updatePolicy>
+			</snapshots>
+			<releases>
+				<updatePolicy>always</updatePolicy>
+			</releases>
+		</repository>
+		<repository>
+			<id>idea-nexus</id>
+			<name>IDEA Nexus Repo</name>
+			<url>http://nexus2-idea.intuit.net/nexus/content/repositories/intuit-idea-analytics</url>
+		</repository>
+	</repositories>
+
+	<dependencies>
+		<dependency>
+			<groupId>com.intuit.graph.client</groupId>
+			<artifactId>universal-graph-client-api</artifactId>
+			<version>0.5-SNAPSHOT</version>
+		</dependency>
+		<dependency>
+			<groupId>io.javaslang</groupId>
+			<artifactId>javaslang</artifactId>
+			<version>${javaslang.version}</version>
+		</dependency>
+       		<dependency>
+            		<groupId>com.toddfast.preconditions</groupId>
+            		<artifactId>preconditions</artifactId>
+          		<version>${toddfast.preconditions.version}</version>
+        	</dependency>
+		<dependency>
+			<groupId>com.google.inject.extensions</groupId>
+			<artifactId>guice-assistedinject</artifactId>
+			<version>${guice.assistedinject.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.slf4j</groupId>
+			<artifactId>slf4j-api</artifactId>
+			<version>${slf4j.api.version}</version>
+		</dependency>
+	</dependencies>
+
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<version>${maven.compiler.plugin}</version>
+				<configuration>
+					<source>${maven.compiler.source}</source>
+					<target>${maven.compiler.target}</target>
+				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-surefire-plugin</artifactId>
+				<version>${maven.surefire.plugin}</version>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-failsafe-plugin</artifactId>
+				<version>${maven.failsafe.plugin}</version>
+				<executions>
+					<execution>
+						<id>integration-test</id>
+						<goals>
+							<goal>integration-test</goal>
+						</goals>
+					</execution>
+					<execution>
+						<id>verify</id>
+						<goals>
+							<goal>verify</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-release-plugin</artifactId>
+				<version>${maven.release.plugin}</version>
+			</plugin>
+		</plugins>
+	</build>
+	<pluginRepositories>
+		<pluginRepository>
+			<id>ctg.central</id>
+			<name>CTG Cache Repository</name>
+			<url>http://nexus.intuit.net/nexus/content/groups/public</url>
+		</pluginRepository>
+	</pluginRepositories>
+
+	<profiles>
+		<!-- Cassandra 2.2+ requires JDK8 to run, so none of our tests will work 
+			unless we're using jdk8. -->
+		<profile>
+			<id>jdk8-tests</id>
+			<activation>
+				<jdk>1.8</jdk>
+			</activation>
+			<properties>
+				<skipTests>false</skipTests>
+			</properties>
+		</profile>
+	</profiles>
+</project>
+

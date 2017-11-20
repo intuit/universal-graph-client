@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!-- Copyright (c) 2012-2016 YCSB contributors. All rights reserved. Licensed
+        under the Apache License, Version 2.0 (the "License"); you may not use this
+        file except in compliance with the License. You may obtain a copy of the
+        License at http://www.apache.org/licenses/LICENSE-2.0 Unless required by
+        applicable law or agreed to in writing, software distributed under the License
+        is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+        KIND, either express or implied. See the License for the specific language
+        governing permissions and limitations under the License. See accompanying
+        LICENSE file. -->
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                 xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<groupId>com.intuit.graph.client</groupId>
+	<artifactId>graph-client-core</artifactId>
+	<version>1.0-SNAPSHOT</version>
+	<name>graph-client-core</name>
+	<packaging>pom</packaging>
+
+	<properties>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <maven.compiler.source>1.8</maven.compiler.source>
+        <maven.compiler.target>1.8</maven.compiler.target>
+		<maven.compiler.plugin>3.6.1</maven.compiler.plugin>
+		<maven.release.plugin>2.5.3</maven.release.plugin>
+		<maven.surefire.plugin>2.20</maven.surefire.plugin>
+		<maven.failsafe.plugin>2.19.1</maven.failsafe.plugin>
+		<junit.version>4.10</junit.version>
+		<mockito.core.version>2.7.22</mockito.core.version>
+		<hamcrest.all.version>1.3</hamcrest.all.version>
+		<testng.version>6.11</testng.version>
+		<javafaker.version>0.13</javafaker.version>
+		<javaslang.version>2.1.0-alpha</javaslang.version>
+		<toddfast.preconditions.version>1.0</toddfast.preconditions.version>
+		<guice.inject.version>4.1.0</guice.inject.version>
+		<guice.assistedinject.version>4.1.0</guice.assistedinject.version>
+		<slf4j.api.version>1.7.14</slf4j.api.version>
+	</properties>
+
+	<repositories>
+                <repository>
+                        <id>central</id>
+                        <name>Maven Repository Switchboard</name>
+                        <layout>default</layout>
+                        <url>http://repo1.maven.org/maven2</url>
+                        <snapshots>
+                                <enabled>false</enabled>
+                        </snapshots>
+                </repository>
+                <repository>
+                        <id>intuit-nexus</id>
+                        <name>Intuit Nexus Repo</name>
+                        <url>http://nexus.intuit.net/nexus/content/groups/public</url>
+                </repository>
+                <repository>
+                        <id>idea-nexus-snapshot</id>
+                        <name>IDEA Nexus Snapshot Repo</name>
+                        <url>http://nexus2-idea.intuit.net/nexus/content/repositories/intuit-idea-analytics-snapshots</url>
+                        <snapshots>
+                                <updatePolicy>always</updatePolicy>
+                        </snapshots>
+                        <releases>
+                                <updatePolicy>always</updatePolicy>
+                        </releases>
+                </repository>
+                <repository>
+                        <id>idea-nexus</id>
+                        <name>IDEA Nexus Repo</name>
+                        <url>http://nexus2-idea.intuit.net/nexus/content/repositories/intuit-idea-analytics</url>
+                </repository>
+        </repositories>
+
+	<dependencies>
+		<!-- Test related dependencies -->
+		<dependency>
+            		<groupId>junit</groupId>
+            		<artifactId>junit</artifactId>
+            		<version>${junit.version}</version>
+            		<scope>test</scope>
+        	</dependency>
+		<dependency>
+            		<groupId>org.mockito</groupId>
+            		<artifactId>mockito-core</artifactId>
+            		<version>${mockito.core.version}</version>
+            		<scope>test</scope>
+        	</dependency>
+		<dependency>
+                        <groupId>org.hamcrest</groupId>
+                        <artifactId>hamcrest-all</artifactId>
+                        <version>${hamcrest.all.version}</version>
+                        <scope>test</scope>
+                </dependency>
+                <dependency>
+                        <groupId>org.testng</groupId>
+                        <artifactId>testng</artifactId>
+                        <version>${testng.version}</version>
+                        <scope>test</scope>
+                </dependency>
+                <dependency>
+                        <groupId>com.github.javafaker</groupId>
+                        <artifactId>javafaker</artifactId>
+                        <version>${javafaker.version}</version>
+                        <scope>test</scope>
+                </dependency>
+	</dependencies>
+
+	<modules>
+		<module>universal-graph-client-api</module>
+		<module>universal-graph-client-impl-core</module>
+		<module>graph-client-impl-provider-dse</module>
+	</modules>
+</project>
+

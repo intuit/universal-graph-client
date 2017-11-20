@@ -1,0 +1,167 @@
+#!Jenkinsfile
+
+
+nexusReleaseUrl = "http://nexus2-idea.intuit.net/nexus/content/repositories/intuit-idea-analytics/"
+nexusReleaseId = "intuit-idea-analytics"
+nexusSnapshotUrl = "http://nexus2-idea.intuit.net/nexus/content/repositories/intuit-idea-analytics-snapshots/"
+nexusSnapshotId = "intuit-idea-analytics-snapshots"
+
+node() {
+//    def server = Artifactory.newServer url: SERVER_URL, credentialsId: CREDENTIALS
+//    def rtMaven = Artifactory.newMavenBuild()
+    String workspace = pwd()
+    String mvnHome = tool 'M3'
+    String properties = ""
+    env.PATH = "${mvnHome}/bin:${env.PATH}"
+
+    try {
+        stage 'Checkout Source'
+        checkout scm
+        pom = readMavenPom file: 'pom.xml'
+
+        def version = pom.version
+        def nexusUrl = nexusSnapshotUrl
+        def nexusId = nexusSnapshotId
+
+        if('master' == env.BRANCH_NAME){
+            version = pom.version.replace("-SNAPSHOT", ".${currentBuild.number}")
+            nexusUrl = nexusReleaseUrl
+            nexusId = nexusReleaseId
+        }
+
+        stage 'Build Platform'
+        sh "mvn versions:set -DnewVersion=$version -f pom.xml $properties -B -U -DskipTests clean package"
+        sh "mvn versions:revert"
+
+//        stage 'Test'
+//        sh "mvn -f pom.xml $properties -B -U test javadoc:aggregate"
+
+        stage 'Stash and Archive'
+        archiveArtifacts artifacts: '**/*.jar', fingerprint: true
+
+        stage 'Publish Artifact'
+        publish(null, nexusId, nexusUrl)
+
+        stage 'Notification'
+        currentBuild.result = 'SUCCESS'
+        notifyBuildResult(currentBuild.result)
+    } catch (e) {
+        currentBuild.result = "FAILED"
+        notifyBuildResult(currentBuild.result)
+    }
+}
+
+
+def publishArtifact(){
+    println("publishing artifact on branch '${env.BRANCH_NAME}'")
+    if ('develop' == env.BRANCH_NAME) {
+        stage 'Publish Artifacts to Nexus Snapshot Repository'
+        node() {
+            try {
+                def nexusId = nexusSnapshotId
+                def nexusUrl = nexusSnapshotUrl
+                for (env in ["e2e", "qal", "prf"]) {
+                    publish(env, nexusId, nexusUrl)
+                }
+            } catch (e) {
+                currentBuild.result = "FAILED"
+                notifyBuildResult(currentBuild.result)
+            }
+        }
+    } else if ('master' == env.BRANCH_NAME) {
+        stage 'Publish Artifacts to Nexus Release Repository'
+        node() {
+            try {
+                def nexusId = nexusReleaseId
+                def nexusUrl = nexusReleaseUrl
+                publish("production", nexusId, nexusUrl)
+            } catch (e) {
+                currentBuild.result = "FAILED"
+                notifyBuildResult(currentBuild.result)
+            }
+        }
+    } else if (env.BRANCH_NAME.startsWith("release")) {
+         stage 'Publish Artifacts to Nexus Release Repository'
+         node() {
+             try {
+                 def nexusId = nexusReleaseId
+                 def nexusUrl = nexusReleaseUrl
+                 for (env in ["e2e", "qal", "prf", "production"]) {
+                     publish(env, nexusId, nexusUrl)
+                 }
+             } catch (e) {
+                 currentBuild.result = "FAILED"
+                 notifyBuildResult(currentBuild.result)
+             }
+         }
+     }
+}
+
+def publish(String $profile, nexusId, nexusUrl) {
+    if($profile){
+        sh "mvn -P $profile deploy -DskipTests=true -Dmaven.install.skip=true -DaltDeploymentRepository=" + nexusId + "::default::" + nexusUrl
+    } else {
+        sh "mvn deploy -DskipTests=true -Dmaven.install.skip=true -DaltDeploymentRepository=" + nexusId + "::default::" + nexusUrl
+    }
+}
+
+
+// Slack Integration
+
+// if true, build sends notifications
+NOTIFICATIONS_ENABLED     = env.NOTIFICATIONS_ENABLED ?: 'true'
+NOTIFICATIONS_CHANNEL     = env.NOTIFICATIONS_CHANNEL ?: '#df_persist_build'
+NOTIFICATIONS_TOKEN_CREDS = env.NOTIFICATIONS_TOKEN_CREDS ?: 'data-fabric-slack-datafabric_ci'
+
+def notifySlack(color, message) {
+  if (NOTIFICATIONS_ENABLED == 'true')
+    slackSend channel: NOTIFICATIONS_CHANNEL,
+            color: color, failOnError: true,
+            message: message,
+            teamDomain: 'intuit-teams',
+            tokenCredentialId: NOTIFICATIONS_TOKEN_CREDS
+}
+
+def notifyStarted() {
+  notifySlack('good', "STARTED: Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]' (${env.BUILD_URL})")
+}
+
+def notifySuccess(additionalInfo = '') {
+  notifySlack('good', "FINISHED: Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]' (${env.BUILD_URL}) finished. ${additionalInfo}")
+}
+
+def notifyUnstable() {
+  notifySlack('warning', "UNSTABLE: Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]' (${env.BUILD_URL})")
+}
+
+def notifyFailed() {
+  notifySlack('danger', "FAILED: Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]' (${env.BUILD_URL})")
+}
+
+def notifyBuildResult(result) {
+    println("reporting build result '${result}'")
+    switch (result) {
+        case 'UNSTABLE':
+            println("sending unstable notification")
+            notifyUnstable()
+            break
+        case 'FAILED':
+            println("sending failure notification")
+            notifyFailed()
+            break
+        default:
+            println("sending success notification")
+            //notifySuccess()
+    }
+}
+
+
+// End Slack Integration
+// ==================================================
+
+/**
+ * @return the current git commit id
+ */
+def fetch_git_commit_id() {
+    sh(returnStdout: true, script: 'git rev-parse HEAD').trim()
+}
