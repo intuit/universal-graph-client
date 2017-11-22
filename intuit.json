@@ -1,0 +1,13 @@
+{
+  "nehaverma1234": {
+    "intuit-id": "nverma1",
+    "access": {
+      "push": [
+        "universal-graph-client"
+      ],
+      "admin": [
+        "universal-graph-client"
+      ]
+    }
+  }
+}
