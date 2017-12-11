@@ -202,42 +202,43 @@ Partial implementation of the Universal Graph Client API, requiring a persistenc
 ### Graph Client DSE Provider 
 This is a specific provider for DSE Graph. Look at the `com.intuit.ugc.impl.persistence.dse.DSEGraphVisitor` class to understand how the implementation for all the different graph operations are done. Each of the API here is specific to one operation that can be done over the underlying DSE Graph database. Currently, create, select, update and delete operations are supported for both vertices and edges.
 If you intend to use the Graph Client DSE Provider in your project, you can first modify it's pom.xml file to include this data stax driver dependency in the pom.xml :
-````xml
+```xml
 <dependency>
 	<groupId>com.datastax.cassandra</groupId>
 	<artifactId>dse-driver</artifactId>
 	<version>1.1.0</version>
 </dependency>
-````
+```
 Thereafter, compile the module and include it in your own project using the following pom.xml dependency :
-````xml
+```xml
 <dependency>	
 	<groupId>com.intuit.graph.client.impl</groupId>
 	<artifactId>graph-client-impl-provider-dse</artifactId>
 	<version>1.0-SNAPSHOT</version>
-</dependency>````
+</dependency>
+```
 
 Now, you are all set to start calling into it's APIs to make use of this module. 
 For details on how to use the Graph Client DSE Provider, look at the tests in `com.intuit.ugc.impl.persistence.dse.DSEGraphTest`. The tests here create a simple `author` Vertex and a `book` Vertex with their own specific properties and then create an `authored` relationship between these two vertices, all using the `com.intuit.ugc.impl.persistence.dse.DSEGraphVisitor` APIs. The user can have one or more equivalent of the implementation in this test class to run operations over underlying DSE persistence store.
 
 #### Prerequisite to running the test
 If you want to run the functional tests that come with Graph Client DSE Provider, you should first have your basic DSE Graph setup done.Refer:() on how to setup the DSE Graph on your local system for test purpose. Once the graph is setup, you should launch the gremlin console using the command from the DSE Installation Directory
-````
+````java
 bin/dse gremlin-console
 ````
 Then from the gremlin console, you should run the following commands:
 1. Connect to a test graph:
-````
+````java
 :remote config alias g test.g
 ````
 2. Create the labels if not already present
-````
+````java
 schema.vertexLabel('Book').ifNotExists().create()
 schema.vertexLabel('Author').ifNotExists().create()
 ````
 
 Now, you are all set to run the tests.Once the tests are run, you can view the graph that got created in the DSE provided UI. To launch the UI and view the graph, follow these steps:
-````
+````java
 cd <dse-installation-folder>/bin
 ./start_studio_server  (This launches the UI Server)
 Go to the browser and open http://localhost:9091/ (This launches the UI)
@@ -255,7 +256,8 @@ Universal Graph Client DSE provider is readily embeddable via the following mave
         <groupId>com.intuit.graph.client.impl</groupId>
         <artifactId>graph-client-impl-provider-dse</artifactId>
         <version>1.0-SNAPSHOT</version>
-</dependency>```
+</dependency>
+```
 
 ## Quick instructions to setup a graph client provider 
 If you intend to use an existing graph client provider like the DSE provider, these are the two steps to set it up:
@@ -265,7 +267,8 @@ If you intend to use an existing graph client provider like the DSE provider, th
       	<groupId>com.intuit.graph.client.impl</groupId>
 		<artifactId>graph-client-impl-provider-dse</artifactId>
         <version>1.0-SNAPSHOT</version>
-</dependency>```
+</dependency>
+```
 
 ### Step2 : Inject the provider in your initializer class, passing it the properties file location from where to load the database properties. Below is a sample code snippet for the same:
 ````java
@@ -293,7 +296,8 @@ Add the pom dependency of the graph-client-api into your project
 	<groupId>com.intuit.graph.client</groupId>
 	<artifactId>universal-graph-client-api</artifactId>
 	<version>0.5-SNAPSHOT</version>
-</dependency>```
+</dependency>
+```
 
 And add the dependency of graph-client-impl-core also in your project
 ```xml
@@ -301,7 +305,8 @@ And add the dependency of graph-client-impl-core also in your project
 	<groupId>com.intuit.graph.client.impl</groupId>
 	<artifactId>universal-graph-client-impl-core</artifactId>
 	<version>1.0-SNAPSHOT</version>
-</dependency>```
+</dependency>
+```
 
 ### Step 2 : Define the persistence properties and load them
 You need to define the persistence properties using which your project will connect to the underlying graph. It can be a simple text file. (Refer to `graph-client-impl-provider-dse/src/test/resource/graph_client_dse_test.properties` for a guidance). And then, you have to define a class which loads this resource, like the one below:
