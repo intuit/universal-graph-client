@@ -210,12 +210,12 @@ If you intend to use the Graph Client DSE Provider in your project, you can firs
 </dependency>
 ````
 Thereafter, compile the module and include it in your own project using the following pom.xml dependency :
-```xml
+````xml
 <dependency>	
 	<groupId>com.intuit.graph.client.impl</groupId>
 	<artifactId>graph-client-impl-provider-dse</artifactId>
 	<version>1.0-SNAPSHOT</version>
-</dependency>```
+</dependency>````
 
 Now, you are all set to start calling into it's APIs to make use of this module. 
 For details on how to use the Graph Client DSE Provider, look at the tests in `com.intuit.ugc.impl.persistence.dse.DSEGraphTest`. The tests here create a simple `author` Vertex and a `book` Vertex with their own specific properties and then create an `authored` relationship between these two vertices, all using the `com.intuit.ugc.impl.persistence.dse.DSEGraphVisitor` APIs. The user can have one or more equivalent of the implementation in this test class to run operations over underlying DSE persistence store.
