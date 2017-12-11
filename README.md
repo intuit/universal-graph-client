@@ -2,6 +2,20 @@
 Universal Graph Client contains data persistence API and implementations specific to data persistence in graph databases. It can be called a JDBC for graph databases. The APIs are designed in such a way that they can be easily extended to work with any graph database. Thereby enabling the end developer to work with java APIs over the graph database, hiding the complexities of the underlying database query and it's complexities. Moreover, the language is very human readable kind of, which makes the API flows self explanatory.
 
 This project consists of 3 modules:
+1. Universal Graph Client SDK API
+2. Universal Graph Client SDK Core Implementation
+3. Graph Client DSE Provider
+
+### Graph Databases
+We live in a connected world. There are no isolated pieces of information, but rich, connected domains all around us. Only a database that embraces relationships as a core aspect of its data model is able to store, process, and query connections efficiently. While other databases compute relationships expensively at query time, a graph database stores connections as first class citizens, readily available for any “join-like” navigation operation. Accessing those already persistent connections is an efficient, constant-time operation and allows you to quickly traverse millions of connections per second per core.
+
+There are some 30 popular variations of graph databases which are being used worldwide in real applications for everyday data modelling and insights. (Ref: https://en.wikipedia.org/wiki/Graph_database ) These graph databases come under different licenses, have compatibility with different programming languages and work with different query languages (Gremlin, GraphQL and SPARQL to name a few). But, as of today, there is no one single set of APIs and their implementation available, which could plug with any of these graph databases and work with them, irrespective of their underlying graph query language or programming language compatibility.
+
+#### Benefits that Universal Graph Client provides
+* Ease of adaptability: Universal Graph Client hides the underlying complexities to deal with the underlying graph database, exposing natural language friendly APIs, this drastically reduces the learning curve of the application developer.
+* Speed & Agility: Developer can now focus on his business requirements and need not worry about the complexities of the underlying graph database
+* Quick and smooth Migration: Universal Graph Client provides one API set for all varieties of graph databases so migration to another graph databases is just changing few configurations
+
 
 ### Universal Graph Client SDK API
 Universal Graph Client provider the java APIs to work with graph database. It is the equivalent of, for example, a JDBC driver or the DataStax Cassandra Java driver for any persistence service which intends to work with an underlying graph database. It is the primary interface for Java developers to use a persistence service over graph database. 
@@ -205,6 +219,30 @@ Thereafter, compile the module and include it in your own project using the foll
 
 Now, you are all set to start calling into it's APIs to make use of this module. 
 For details on how to use the Graph Client DSE Provider, look at the tests in `com.intuit.ugc.impl.persistence.dse.DSEGraphTest`. The tests here create a simple `author` Vertex and a `book` Vertex with their own specific properties and then create an `authored` relationship between these two vertices, all using the `com.intuit.ugc.impl.persistence.dse.DSEGraphVisitor` APIs. The user can have one or more equivalent of the implementation in this test class to run operations over underlying DSE persistence store.
+
+#### Prerequisite to running the test
+If you want to run the functional tests that come with Graph Client DSE Provider, you should first have your basic DSE Graph setup done.Refer:() on how to setup the DSE Graph on your local system for test purpose. Once the graph is setup, you should launch the gremlin console using the command from the DSE Installation Directory
+````
+bin/dse gremlin-console
+````
+Then from the gremlin console, you should run the following commands:
+1. Connect to a test graph:
+````
+:remote config alias g test.g
+````
+2. Create the labels if not already present
+````
+schema.vertexLabel('Book').ifNotExists().create()
+schema.vertexLabel('Author').ifNotExists().create()
+````
+
+Now, you are all set to run the tests.Once the tests are run, you can view the graph that got created in the DSE provided UI. To launch the UI and view the graph, follow these steps:
+````
+cd <dse-installation-folder>/bin
+./start_studio_server  (This launches the UI Server)
+Go to the browser and open http://localhost:9091/ (This launches the UI)
+Navigate to 'Notebooks' in the UI. There will be one Notebook specific to the schema you just created (test). Inside this Notebook, you can see the graph just created.
+````
 
 #### Usage
 
