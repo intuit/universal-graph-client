@@ -109,6 +109,7 @@
 		<module>universal-graph-client-api</module>
 		<module>universal-graph-client-impl-core</module>
 		<module>graph-client-impl-provider-dse</module>
+                <module>graph-client-impl-provider-neptune</module>
 	</modules>
 </project>
 
