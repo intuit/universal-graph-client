@@ -1,0 +1,6 @@
+/Users/ajain17/Work/Code/hacktoberfest/universal-graph-client/graph-client-impl-provider-neptune/src/test/java/com/intuit/ugc/impl/persistence/neptune/NeptunePersistenceConfigurationProperties.java
+/Users/ajain17/Work/Code/hacktoberfest/universal-graph-client/graph-client-impl-provider-neptune/src/test/java/com/intuit/ugc/impl/persistence/neptune/NeptuneGraphSession.java
+/Users/ajain17/Work/Code/hacktoberfest/universal-graph-client/graph-client-impl-provider-neptune/src/test/java/com/intuit/ugc/impl/persistence/neptune/NeptuneGraphVisitor.java
+/Users/ajain17/Work/Code/hacktoberfest/universal-graph-client/graph-client-impl-provider-neptune/src/test/java/com/intuit/ugc/impl/persistence/neptune/NeptuneDSEPersistenceRepositoryProvider.java
+/Users/ajain17/Work/Code/hacktoberfest/universal-graph-client/graph-client-impl-provider-neptune/src/test/java/com/intuit/ugc/impl/persistence/neptune/NeptuneConnectionManager.java
+/Users/ajain17/Work/Code/hacktoberfest/universal-graph-client/graph-client-impl-provider-neptune/src/test/java/com/intuit/ugc/impl/persistence/neptune/NeptunePersistenceConfiguration.java
