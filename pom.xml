@@ -26,7 +26,7 @@
 		<maven.release.plugin>2.5.3</maven.release.plugin>
 		<maven.surefire.plugin>2.20</maven.surefire.plugin>
 		<maven.failsafe.plugin>2.19.1</maven.failsafe.plugin>
-		<junit.version>4.10</junit.version>
+		<junit.version>4.13.1</junit.version>
 		<mockito.core.version>2.7.22</mockito.core.version>
 		<hamcrest.all.version>1.3</hamcrest.all.version>
 		<testng.version>6.11</testng.version>
